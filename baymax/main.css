@@ -1,0 +1,126 @@
+/* 三头六臂 */
+/*
+* { 匹配所有标签
+    margin: 0;
+    padding: 0;
+}不推荐，性能不好*/
+/*css reset比 * 更快*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*业务代码*/
+body {
+    height: 100vh;
+    background: radial-gradient(circle at center, #fff, #fff 50%, #aaa 100%);  /* 环形渐变 */
+}
+.baymax {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-40%);   /* 往左移动自身的50%，往上移50% */
+    background-color: black;
+    border-bottom: 1.5em solid #000;
+}
+/*before、after伪元素不需要标签不用标签声明，是通过css声明的，可像标签一样达到占位显示的效果,通过.baymax就可以显示微元素content中的内容*/
+.baymax:before {
+    content: "";
+    width: 12em;
+    height: 12em;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: -6em;
+    left: -9em;
+    background: linear-gradient(to bottom , #efefef 50%, #000 50%, #000);
+    background-size: 200% 200%;
+    background-position: 0 -100%;
+    animation: blink 6s infinite;
+}
+.baymax:after {
+    content: "";
+    width: 12em;
+    height: 12em;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    top: -6em;
+    right: -9em;
+    background: linear-gradient(to bottom , #efefef 50%, #000 50%, #000);
+    background-size: 200% 200%;
+    background-position: 0 -100%;
+    /*animation: blink 6s .1s infinite; 0.1s运动差*/
+    animation-delay: 0,1s;/*延迟0.1s*/
+    animation-name: blink;
+    animation-duration: 6s;/*运动时长6s*/
+    animation-iteration-count: infinite;/*一直动*/
+}
+@keyframes blink {
+    0%,50% {
+        background-position: 0 100%;
+    }
+    85%,95% {
+        background-position: 0 75%;
+    }
+    100% {
+        background-position: 0 100%;
+    }
+}
+/*适配移动端，响应式编程*/
+@media only screen and (max-width: 480px){
+    .baymax:before, .baymax:after{
+        width: 8em;
+        height: 8em;
+        top: -4em;
+    }
+    .baymax:before{
+        left: -5em;
+    }
+    .baymax:after{
+        right: -5em;
+    }
+    .baymax{
+        border-bottom: 0.5em solid #000;
+    }
+}
