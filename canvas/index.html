@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            text-align: center;
+        }
+        #draw {
+            border: 1px solid #000;
+        }
+        .make{
+            width: 100%;
+            display: flex;
+            padding: 1rem;
+            justify-content: center; /*水平居中*/
+            
+        }
+        .reset,.clear,.color,.goset{
+            border: 1px solid rgb(94, 157, 240);
+            background-color: rgb(94, 157, 240,0.9);
+            padding: 0.7rem;
+            margin-left: 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transform: translate(-50%,0);
+            color: white;
+        }
+        .color{
+            /* border: 1px solid black;
+            background-color: black; */
+            border-radius: 50%;
+            padding: 0 0.5rem;
+            line-height: 2.5rem;
+        }
+        input{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 画布 -->
+    <main class="container">
+        <canvas id="draw" width="600px" height="600px" style="margin-top: 50px"></canvas>
+        <div class="make">
+            <div class="reset">前进</div>
+            <div class="goset">后退</div>
+            <div class="clear">清空</div>
+            <div class="color"><input type="color" id="myColor"><label for="myColor">颜色</label></div>
+        </div>
+    </main>
+    
+    <script>
+        const sets = document.querySelector('.reset');
+        const gos = document.querySelector('.goset');
+        const clears = document.querySelector('.clear');
+        var color = document.getElementById("myColor");
+        var colorBgc = document.querySelector(".color");
+        
+        
+        const canvas = document.querySelector('#draw');
+        // console.log(canvas);
+        const ctx = canvas.getContext('2d'); //绘画环境
+        canvas.width = window.innerWidth-400;
+        canvas.height = window.innerHeight-150;
+
+        color.onchange = function () {//改变颜色
+            color.click(); // 必须添加触发click事件否则不能通过点击确定按钮触发更改颜色
+            console.log(color.value);
+            ctx.strokeStyle = color.value;
+            colorBgc.style.backgroundColor = color.value;
+            colorBgc.style.borderColor = color.value;
+        }
+        
+        console.log('11'+ctx.strokeStyle);
+        //ctx.strokeStyle = '#BADA55'; 开始画画，选择描边颜色
+        ctx.lineWidth = 100;  //划线宽度100
+        ctx.lineJoin = 'round'; //两线相交有圆角
+        ctx.lineCap = 'round'; //划线有圆角
+        // ctx.moveTo(700,50);//从某处开始画
+        // ctx.lineTo(150,50); //画到某处结束
+        // ctx.stroke();//结束画画
+        
+        
+        //全局变量
+        let lastX = 0,
+            lastY = 0,
+            isDrawing = false,
+            hue = 0,
+            direction = true;
+        let imgData;
+        let lastData;
+        function copy(){
+            if(!isDrawing){
+                lastData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                console.log('copylast'+lastData);
+            }else{
+                imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                console.log('copyimg'+imgData);
+            }
+        }
+        function draw(event){
+            // console.log(event.offsetX,event.offsetY);
+            if(!isDrawing) return;
+            console.log(event);
+            
+            // ctx.strokeStyle = 'hsl('+ hue +',100%,50%)';
+            ctx.beginPath();
+            ctx.moveTo(lastX,lastY);
+            ctx.lineTo(event.offsetX,event.offsetY);
+            ctx.stroke();
+            lastX = event.offsetX;
+            lastY = event.offsetY;
+
+            hue++;
+            if(hue >=360) {
+                hue = 0;
+            }
+
+            if(ctx.lineWidth >=100 || ctx.lineWidth <=1) {
+                direction = !direction;
+            }
+            if(direction){
+                ctx.lineWidth++;
+            }else{
+                ctx.lineWidth--;
+            }
+        }
+        canvas.addEventListener('mousedown',function(event){
+            // console.log(event.offsetX,event.offsetY);
+            isDrawing = true; //开关量，决定mousemove的时候是否要画线
+            copy();
+            lastX = event.offsetX;
+            lastY = event.offsetY;
+            startX = lastX;
+            startY = lastY;
+        });
+        canvas.addEventListener('mousemove', draw);
+        // canvas.addEventListener('mouseup',function(event){
+        //     isDrawing = false;
+        // });
+        canvas.addEventListener('mouseup',function () {
+             isDrawing=false;
+             copy();
+             console.log('copylast'+lastData);
+        });
+        canvas.addEventListener('mouseout', () => isDrawing=false);//鼠标超出容器氛围
+
+        sets.addEventListener('click',function(event){
+            console.log('111');
+            console.log(imgData);
+            ctx.putImageData(imgData,0,0);
+        });
+        gos.addEventListener('click',function(event){
+            console.log('222');
+            console.log(lastData);
+            ctx.putImageData(lastData,0,0);
+        });
+        clears.addEventListener('click',function(event){
+            console.log('333');
+            var clearData=ctx.createImageData(imgData);
+            console.log(clearData);
+            ctx.putImageData(clearData,0,0);
+        });
+
+    </script>
+</body>
+</html>
