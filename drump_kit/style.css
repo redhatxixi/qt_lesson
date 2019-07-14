@@ -1,0 +1,38 @@
+html {
+    /* css 属性会继承 */
+    font-size: 10px;
+    background: url(http://i.imgur.com/b9r5sEL.jpg) bottom center; 
+    background-size: cover;
+}
+body,html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+.keys {
+    display: flex; /*弹性布局---不受屏幕大小影响,放于父类容器，可对子容器有效果，不对孙容器产生效果*/
+    flex: 1; /*等比例*/
+    min-height: 100vh;
+    background-color: brown;
+    justify-content: center; /*水平居中*/
+    align-items: center; /*垂直居中*/
+}
+.key {
+    border: .4em solid black;
+    border-radius: 0.5rem;
+    margin: 1rem;
+    font-size: 1.5rem;
+    padding: 1rem 0.5rem;
+    width: 10rem;
+    text-align: center;
+    color: white;
+    background: rgb(0, 0, 0,.4);
+    text-shadow: 0 0.5rem black;
+    transition: all .07s ease;  /*当盒子样式方式改变时，加上这句可以有一个过渡效果，先慢后快加速效果*/
+}
+
+.playing {
+    transform: scale(1.1);
+    border-color: #ffc600;
+    box-shadow: 0 0 1rem #ffc600;
+}
