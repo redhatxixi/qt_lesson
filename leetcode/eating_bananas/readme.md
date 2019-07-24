@@ -16,7 +16,7 @@ max-- 直到在 H 小时内吃完
 
 - js数据类型
     基础数据类型
-    number sring boolean undefined null
+    number sring boolean undefined null symbol
     复杂数据类型 object
     [Array function Math Regexp Date]
     
